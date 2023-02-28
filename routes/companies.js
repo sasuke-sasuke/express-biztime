@@ -28,7 +28,9 @@ router.get("/:code", async (req, res, next) => {
     }
     const { company, name, description } = results.rows[0];
     const invResults = await db.query(
-      `SELECT  id, amt, paid, add_date, paid_date FROM invoices WHERE comp_code=$1`,
+      `SELECT  id, amt, paid, add_date, paid_date 
+      FROM invoices 
+      WHERE comp_code=$1`,
       [code]
     );
     return res.json({
@@ -47,7 +49,9 @@ router.post("/", async (req, res, next) => {
   try {
     const { code, name, description } = req.body;
     const results = await db.query(
-      "INSERT INTO companies (code, name, description) VALUES ($1, $2, $3) RETURNING *",
+      `INSERT INTO companies (code, name, description) 
+      VALUES ($1, $2, $3) 
+      RETURNING *`,
       [code, name, description]
     );
     return res.status(201).json({ company: results.rows[0] });
@@ -61,7 +65,9 @@ router.patch("/:code", async (req, res, next) => {
     const { code } = req.params;
     const { name, description } = req.body;
     const result = await db.query(
-      `UPDATE companies SET name=$1, description=$2 WHERE code=$3 RETURNING code, name, description`,
+      `UPDATE companies SET name=$1, description=$2 
+      WHERE code=$3 
+      RETURNING code, name, description`,
       [name, description, code]
     );
     if (result.rows.length === 0) {
