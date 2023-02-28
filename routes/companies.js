@@ -6,7 +6,7 @@ const db = require("../db");
 // Gets All companies in DB reutrns JSON
 router.get("/", async (req, res, next) => {
   try {
-    const results = await db.query(`SELECT * FROM companies;`);
+    const results = await db.query(`SELECT code, name FROM companies;`);
     return res.json({ companies: results.rows });
   } catch (e) {
     return next(e);
