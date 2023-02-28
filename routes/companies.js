@@ -48,6 +48,9 @@ router.get("/:code", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     const { code, name, description } = req.body;
+    if (name === null || description == undefined) {
+      throw new ExpressError("Must include data to add", 404);
+    }
     const results = await db.query(
       `INSERT INTO companies (code, name, description) 
       VALUES ($1, $2, $3) 
@@ -93,7 +96,7 @@ router.delete("/:code", async (req, res, next) => {
     const result = await db.query(`DELETE FROM companies WHERE code=$1`, [
       code,
     ]);
-    return res.json({ status: "deleted!" });
+    return res.json({ status: "deleted" });
   } catch (e) {
     return next(e);
   }
