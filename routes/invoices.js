@@ -29,6 +29,9 @@ router.get("/:id", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     const { comp_code, amt } = req.body;
+    if (comp_code === null || amt === null) {
+      throw new ExpressError("Must include data to add invoice", 404);
+    }
     const result = await db.query(
       `INSERT INTO invoices (comp_code, amt) VALUES ($1, $2) RETURNING *`,
       [comp_code, amt]
